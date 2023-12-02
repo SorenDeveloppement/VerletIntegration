@@ -74,5 +74,8 @@ class VerletObject:
     def set_y(self, y: float) -> None:
         self.y = y
 
-    def is_sticked(self) -> bool:
-        return self.sticked
+    def is_sticked(self, sticked: bool = None) -> bool | None:
+        if sticked == None:
+            return self.sticked
+        else:
+            self.sticked = sticked

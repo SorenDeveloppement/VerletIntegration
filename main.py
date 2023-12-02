@@ -16,10 +16,10 @@ pygame.display.set_caption("Verlet physics")
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 points: list[VerletObject] = [
-    VerletObject(401, 100, 1, 10, False),
-    VerletObject(400, 200, 1, 10, False),
-    VerletObject(400, 300, 1, 10, False),
-    VerletObject(400, 400, 1, 10, True)
+    VerletObject(200, 200, 1, 10, False),
+    VerletObject(300, 200, 1, 10, True),
+    VerletObject(300, 300, 1, 10, False),
+    VerletObject(200, 300, 1, 10, False)
 ]
 
 """sticks: list[Stick] = [
@@ -29,9 +29,12 @@ points: list[VerletObject] = [
 ]"""
 
 sticks: list[Stick] = [
-    Spring(points[0], points[1], 10, 30, 0.7),
-    Spring(points[1], points[2], 10, 30, 0.7),
-    Spring(points[2], points[3], 10, 30, 0.7)
+    Spring(points[0], points[1], 10, 100, 0.5),
+    Spring(points[1], points[2], 10, 100, 0.5),
+    Spring(points[2], points[3], 10, 100, 0.5),
+    Spring(points[3], points[0], 10, 100, 0.5),
+    Spring(points[2], points[0], 10, 141, 0.5),
+    Spring(points[3], points[1], 10, 141, 0.5),
 ]
 
 while True:
@@ -42,12 +45,12 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-        if event.type == pygame.MOUSEMOTION:
+        if event.type == pygame.MOUSEBUTTONDOWN:
             if pygame.mouse.get_pressed()[0]:
                 for point in points:
                     mouse_pos = pygame.mouse.get_pos()
                     if point.contact(mouse_pos):
-                        point.set_pos(mouse_pos[0], mouse_pos[1])
+                        point.is_sticked(not point.is_sticked())
 
     # update
 

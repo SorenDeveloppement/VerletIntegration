@@ -12,9 +12,20 @@ class Spring:
         self.damp: float = damping_factor
 
     def update(self) -> None:
-        dist = math.sqrt((self.p2.get_x() - self.p1.get_x())**2 +
-                         (self.p2.get_y() - self.p1.get_y())**2)
-        x = dist - self.restlength
+        delta_x = self.p2.get_x() - self.p1.get_x()
+        delta_y = self.p2.get_y() - self.p1.get_y()
+        dist = math.sqrt(delta_x * delta_x + delta_y * delta_y)
+        diff = (dist - self.restlength) / dist
+
+        if not self.p1.is_sticked():
+            self.p1.set_pos(self.p1.get_x() + self.damp * diff *
+                            delta_x, self.p1.get_y() + self.damp * diff * delta_y)
+
+        if not self.p2.is_sticked():
+            self.p2.set_pos(self.p2.get_x() - self.damp * diff *
+                            delta_x, self.p2.get_y() - self.damp * diff * delta_y)
+
+        """x = dist - self.restlength
         fs = x * self.stiff
 
         fdx = ((self.p2.get_x() - self.p1.get_x()) / dist) * \
@@ -32,13 +43,7 @@ class Spring:
         fay = ((self.p2.get_y() - self.p1.get_y()) / dist) * fty
 
         fbx = ((self.p1.get_x() - self.p2.get_x()) / dist_ab) * ftx
-        fby = ((self.p1.get_y() - self.p2.get_y()) / dist_ab) * fty
-
-        if not self.p1.is_sticked():
-            self.p1.set_pos(self.p1.get_x() + fax, self.p1.get_y() + fay)
-
-        if not self.p2.is_sticked():
-            self.p2.set_pos(self.p2.get_x() + fbx, self.p2.get_y() + fby)
+        fby = ((self.p1.get_y() - self.p2.get_y()) / dist_ab) * fty"""
 
     def draw(self, screen) -> None:
         pygame.draw.line(screen, (255, 255, 255),
